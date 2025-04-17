@@ -38,8 +38,15 @@
     </div>
 
 
+    <!-- Botón para agregar tarea -->
+    <div class="mb-6 flex justify-end">
+      <button id="addTaskBtn" class="bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-700">
+        <i class="fas fa-plus"></i> Agregar Tarea
+      </button>
+    </div>
 
     <div id="list" class="grid gap-4 md:grid-cols-2">
+      <!-- Aquí se cargarán las tareas -->
     </div>
   </main>
 
