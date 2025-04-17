@@ -32,6 +32,7 @@ $(document).ready(function () {
                                  status+
                                  '<div class="flex justify-end space-x-2 mt-4">'+
                                  '<button class="text-blue-500 hover:text-blue-700 edit-task" data-id="'+data[i]['id']+'"><i class="fas fa-edit"></i> Editar</button>'+
+                                 '<button class="text-red-500 hover:text-red-700 delete-task" data-id="'+data[i]['id']+'"><i class="fas fa-trash"></i> Eliminar</button>'+
                                  '</div>'+
                                  '</div>';
                 }
@@ -155,6 +156,35 @@ $(document).ready(function () {
             },
             error: function(xhr, status, error) {
                 console.log("Error: " + error);  
+            }
+        });
+    });
+
+    $(document).on('click', '.delete-task', function() {
+        var taskId = $(this).data('id');  
+
+        Swal.fire({
+            title: '¿Estás seguro?',
+            text: "No podrás revertir esta acción",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Sí, eliminar',
+            cancelButtonText: 'Cancelar'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    url: '../engine/frontConsult.php',  
+                    type: 'POST',
+                    data: {  getTaskUserDelete: true,task_id: taskId },
+                    success: function(response) {
+                        if (response.success) {
+                            Swal.fire('¡Eliminado!', 'La tarea ha sido eliminada.', 'success');
+                            chargeTaskUser();  
+                        } else {
+                            Swal.fire('Error', 'Hubo un error al eliminar la tarea.', 'error');
+                        }
+                    }
+                });
             }
         });
     });
