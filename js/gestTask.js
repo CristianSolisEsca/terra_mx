@@ -31,6 +31,7 @@ $(document).ready(function () {
                                  '<p class="text-gray-600 text-sm mt-1">'+data[i]['task_description']+'</p>'+
                                  status+
                                  '<div class="flex justify-end space-x-2 mt-4">'+
+                                 '<button class="text-blue-500 hover:text-blue-700 edit-task" data-id="'+data[i]['id']+'"><i class="fas fa-edit"></i> Editar</button>'+
                                  '</div>'+
                                  '</div>';
                 }
@@ -95,6 +96,68 @@ $(document).ready(function () {
           }
         });
       });
+
+
+      $(document).on('click', '.edit-task', function() {
+        var taskId = $(this).data('id');  
+
+        $.ajax({
+            url: '../engine/frontConsult.php',  
+            data: { getTaskUserDataOnlyID: true, taskId: taskId },  
+            type: 'POST',  
+            dataType: 'json',  
+            timeout: 2000, 
+            success: function (data) {
+
+                Swal.fire({
+                    title: 'Editar Tarea',
+                    html: `
+                        <input id="task_name" class="swal2-input" value="${data[0]['task_name']}">
+                        <textarea id="task_description" class="swal2-textarea">${data[0]['task_description']}</textarea>
+                        <select id="task_status" class="swal2-select">
+                            <option value="pending" ${data[0]['status'] === 'pending' ? 'selected' : ''}>Pendiente</option>
+                            <option value="in_progress" ${data[0]['status'] === 'in_progress' ? 'selected' : ''}>En Progreso</option>
+                            <option value="done" ${data[0]['status'] === 'done' ? 'selected' : ''}>Terminado</option>
+                        </select>
+                    `,
+                    focusConfirm: false,
+                    showCancelButton: true,
+                    confirmButtonText: 'Guardar cambios',
+                    cancelButtonText: 'Cancelar',
+                    preConfirm: () => {
+                        var updatedTaskName = document.getElementById('task_name').value;
+                        var updatedTaskDescription = document.getElementById('task_description').value;
+                        var updatedTaskStatus = document.getElementById('task_status').value;
+
+                        $.ajax({
+                            url: '../engine/frontConsult.php', 
+                            type: 'POST',
+                            data: {
+                                getTaskUserUpdate: true,
+                                task_id: taskId,
+                                task_name: updatedTaskName,
+                                task_description: updatedTaskDescription,
+                                task_status: updatedTaskStatus  
+                            },
+                            success: function(response) {
+                                console.log(response);
+                                if (response.success) {
+                                    Swal.fire('¡Éxito!', 'Tarea actualizada correctamente.', 'success');
+                                    chargeTaskUser(); 
+                                } else {
+                                    console.log(response);
+                                    Swal.fire('Error', 'Hubo un error al actualizar la tarea.', 'error');
+                                }
+                            }
+                        });
+                    }
+                });
+            },
+            error: function(xhr, status, error) {
+                console.log("Error: " + error);  
+            }
+        });
+    });
 
     chargeTaskUser();
 

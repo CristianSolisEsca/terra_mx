@@ -51,6 +51,60 @@
 		}
 	}
 	
+	public function getTaskUserDataOnlyID($task_id) {
+		$datos = $this->daoQuery("SELECT id, task_name, task_description, status, due_date 
+								  FROM tasks
+								  WHERE id = $task_id");
+	
+		$json = array();
+		foreach ($datos as $key) {
+			$json[] = array(
+				'id'         		=> $key['id'], 
+				'task_name'  		=> $key['task_name'], 
+				'task_description'  => $key['task_description'], 
+				'status'     		=> $key['status'], 
+				'due_date'   		=> $key['due_date'],
+			);
+		}
+	
+		if (empty($json)) {
+			$json = array('error' => 'No se encontraron datos');
+		}
+	
+		header('Content-Type: application/json');
+		echo json_encode($json);
+	}
+
+	function getTaskUserUpdate($task_id, $task_name, $task_description, $task_status) {
+
+		$checkTaskData = $this->daoQuery("SELECT * FROM tasks WHERE id = '".intval($task_id)."'");
+
+		ob_start(); 
+
+		$this->daoQuery("UPDATE tasks SET 
+			task_name = '".$task_name."', 
+			task_description = '".$task_description."', 
+			status = '".$task_status."' 
+			WHERE id = ".intval($task_id)."");
+
+		$checkUpdate = $this->daoQuery("SELECT COUNT(*) c FROM tasks WHERE id = ".intval($task_id)."");
+
+		ob_clean(); 
+
+		header('Content-Type: application/json');
+
+		if ($checkUpdate[0]['c'] == "1") {
+			echo json_encode(['success' => true]);
+		} else {
+			echo json_encode(['success' => false]);
+		}
+		return;
+	}
+
+
+
+
+
 	}
 
 
