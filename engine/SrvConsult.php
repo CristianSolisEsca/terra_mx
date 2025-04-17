@@ -31,6 +31,25 @@
 		header('Content-Type: application/json');
 		echo json_encode($json);
 	}
+
+	function getTaskUserAdd($task_name, $task_description, $task_status, $user_id) {
+
+		if (empty($task_name) || empty($task_description) || empty($task_status) || empty($user_id)) {
+			echo json_encode(['success' => false, 'message' => 'Todos los campos son obligatorios.']);
+			return;
+		}
+	
+		$query = "INSERT INTO tasks (task_name, task_description, status, user_id, is_deleted) 
+				  VALUES ('".$task_name."', '".$task_description."', '".$task_status."', ".$user_id.", 0)"; 
+
+		$result = $this->daoQuery($query);
+	
+		if ($result) {
+			echo json_encode(['success' => true, 'message' => 'Tarea agregada correctamente.']);
+		} else {
+			echo json_encode(['success' => false, 'message' => 'Error al agregar la tarea.']);
+		}
+	}
 	
 	}
 

@@ -44,6 +44,58 @@ $(document).ready(function () {
         });
     }
 
+    
+    $('#addTaskBtn').click(function() {
+        Swal.fire({
+          title: 'Agregar Nueva Tarea',
+          html: `
+            <input id="task_name" class="swal2-input" placeholder="Nombre de la tarea">
+            <textarea id="task_description" class="swal2-textarea" placeholder="Descripción de la tarea"></textarea>
+            <select id="task_status" class="swal2-select">
+              <option value="pending">Pendiente</option>
+              <option value="in_progress">En Progreso</option>
+              <option value="done">Terminado</option>
+            </select>
+          `,
+          focusConfirm: false,
+          showCancelButton: true,
+          confirmButtonText: 'Agregar',
+          cancelButtonText: 'Cancelar',
+          preConfirm: () => {
+            var taskName = document.getElementById('task_name').value;
+            var taskDescription = document.getElementById('task_description').value;
+            var taskStatus = document.getElementById('task_status').value;
+    
+            if (!taskName || !taskDescription) {
+              Swal.showValidationMessage('Por favor ingresa todos los campos');
+              return false;
+            }
+    
+            $.ajax({
+              url: '../engine/frontConsult.php',
+              type: 'POST',
+              data: {
+                getTaskUserAdd: true,
+                task_name: taskName,
+                task_description: taskDescription,
+                task_status: taskStatus,
+                user_id: $('#axios').val()
+              },
+              success: function(response) {
+                console.log(response);
+                var jsonResponse = JSON.parse(response);
+                if (jsonResponse.success) {
+                    Swal.fire('¡Éxito!', 'Tarea agregada correctamente.', 'success');
+                    chargeTaskUser();
+                } else {
+                    Swal.fire('Error', jsonResponse.message || 'Hubo un error al agregar la tarea.', 'error');
+                }
+              }
+            });
+          }
+        });
+      });
+
     chargeTaskUser();
 
 });
