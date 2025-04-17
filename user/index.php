@@ -37,6 +37,9 @@
       <h2 class="text-2xl font-semibold text-gray-800">Tus Tareas</h2>
     </div>
 
+    <div class="mb-6">
+    <input type="text" id="searchTask" class="w-full p-2 border border-gray-300 rounded-lg" placeholder="Buscar tarea por nombre..." onkeyup="searchTask()" />
+    </div>
 
     <!-- Botón para agregar tarea -->
     <div class="mb-6 flex justify-end">

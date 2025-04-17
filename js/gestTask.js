@@ -194,3 +194,18 @@ $(document).ready(function () {
 });
 
 
+function searchTask() {
+    const searchQuery = document.getElementById("searchTask").value.toLowerCase();
+    const taskItems = document.querySelectorAll("#list .task-item");
+  
+    taskItems.forEach(task => {
+      const taskName = task.querySelector(".task-name").textContent.toLowerCase();
+
+      if (taskName.includes(searchQuery)) {
+        task.style.display = ""; 
+      } else {
+        task.style.display = "none"; 
+      }
+    });
+  
+  }
