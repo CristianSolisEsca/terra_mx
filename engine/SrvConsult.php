@@ -102,7 +102,31 @@
 	}
 
 
+	function getTaskUserDelete($task_id) {
 
+		$checkTaskData = $this->daoQuery("SELECT * FROM tasks WHERE id = '".intval($task_id)."'");
+
+		ob_start(); 
+
+		//LO que he aprendido a hacer son borrados logicos no delete directos ya que puede utilizarse mas adelante la información o sirve de historico
+
+		$this->daoQuery("UPDATE tasks SET 
+			is_deleted = 1 
+			WHERE id = ".intval($task_id)."");
+
+		$checkUpdate = $this->daoQuery("SELECT COUNT(*) c FROM tasks WHERE id = ".intval($task_id)."");
+
+		ob_clean(); 
+
+		header('Content-Type: application/json');
+
+		if ($checkUpdate[0]['c'] == "1") {
+			echo json_encode(['success' => true]);
+		} else {
+			echo json_encode(['success' => false]);
+		}
+		return;
+	}
 
 
 	}

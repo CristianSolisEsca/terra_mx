@@ -20,5 +20,8 @@
 		$inst->getTaskUserUpdate($_POST['task_id'],$_POST['task_name'], $_POST['task_description'], $_POST['task_status'] );
 	}
 
+	if (isset($_POST['getTaskUserDelete'])) {
+		$inst->getTaskUserDelete($_POST['task_id']);
+	}
 
 ?>
