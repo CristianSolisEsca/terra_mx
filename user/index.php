@@ -26,8 +26,10 @@
       <h1 class="text-xl font-bold">Task Manager</h1>
       <span class="text-sm">Bienvenido, <?php echo $_SESSION['name'];?></span>
       <input type="hidden" id="axios" value="<?php echo $_SESSION['userID']; ?>">
-    <div class="flex justify-end">
-   
+      <div class="flex justify-end">
+        <a href="../logout.php" class="bg-red-500 text-white py-2 px-4 rounded hover:bg-red-600">
+            <i class="fas fa-sign-out-alt"></i> Cerrar Sesión
+        </a>
     </div>
     </div>
   </header>
