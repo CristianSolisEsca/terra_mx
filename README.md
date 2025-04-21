@@ -16,7 +16,6 @@ Este proyecto fue desarrollado como parte del examen técnico para Terra MX. La 
 - PHP >= 7.4
 - MySQL
 - Servidor local como Laragon, XAMPP o similar
-- Composer (opcional, si se agregan dependencias en el futuro)
 
 ## Instalación
 
